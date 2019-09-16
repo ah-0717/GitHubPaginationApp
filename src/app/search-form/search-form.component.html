@@ -1,0 +1,6 @@
+<form [formGroup]="searchForm">
+  <input type="text" formControlName="searchValue">
+</form>
+<div>input: {{ message }}</div>
+<button (click)="onClikSearch()">検索</button>
+<app-search-result [searchResult]="searchResult"></app-search-result>
