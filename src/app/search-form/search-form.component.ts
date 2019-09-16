@@ -26,9 +26,11 @@ export class SearchFormComponent implements OnInit {
   searchValue: string;
   state: any; // todo IF定義
   searchResult: ApolloQueryResult<unknown>;
+  loading: boolean;
 
   constructor(private fb: FormBuilder, private apollo: Apollo) {
     this.state = DEFAULT_STATE;
+    this.loading = false;
   }
 
   ngOnInit() {
@@ -44,6 +46,7 @@ export class SearchFormComponent implements OnInit {
   onClikSearch() {
     this.message = this.formSearchValue.value;
     this.searchValue = this.formSearchValue.value;
+    this.loading = true;
 
     this.apollo.watchQuery({
       query: SEARCH_REPOSITORIES,
@@ -51,6 +54,7 @@ export class SearchFormComponent implements OnInit {
     })
     .valueChanges.subscribe(result => {
       console.log(result);
+      this.loading = false;
       this.searchResult = result;
     });
 

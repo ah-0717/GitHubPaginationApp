@@ -1,11 +1,19 @@
-<div *ngIf="result && result.loading">
-  Loading...
-</div>
 <div *ngIf="result && result.errors">
   <ul>
     <li *ngFor="let error of result.errors" >{{error.message}}</li>
   </ul>
 </div>
 <h2>
-  GitHub Repositories Search Results - <ng-container *ngIf="result && !result.loading && !result.errors">{{title}}</ng-container>
+  GitHub Repositories Search Results - <ng-container *ngIf="result && !_loading && !result.errors">{{title}}</ng-container>
 </h2>
+<div *ngIf="_loading">
+    Loading...
+</div>
+<ng-container *ngIf="result && !_loading && !result.errors">
+  <ul>
+    <li *ngFor="let edge of result.data.search.edges">
+      <a href="{{edge.node.url}}" target="_blank">{{edge.node.name}}</a>
+    </li>
+  </ul>
+
+</ng-container>
