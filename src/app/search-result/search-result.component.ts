@@ -16,6 +16,7 @@ export class SearchResultComponent implements OnInit {
   title: string;
 
   @Output() goNext = new EventEmitter();
+  @Output() goPrevious = new EventEmitter();
 
   constructor() {}
 
@@ -51,6 +52,10 @@ export class SearchResultComponent implements OnInit {
   // todo IF定義
   clickNext(search: any) {
     this.goNext.emit(search);
+  }
+
+  clickPrevious(search: any) {
+    this.goPrevious.emit(search);
   }
 
 }
