@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';
-
+import { ME } from '../graphql.module';
 
 @Component({
   selector: 'app-search-result',
@@ -17,14 +16,7 @@ export class SearchResultComponent implements OnInit {
 
   ngOnInit() {
     this.apollo.watchQuery({
-        query: gql`
-        query me {
-          user(login: "ah-1991") {
-            name
-            avatarUrl
-          }
-        }
-        `,
+        query: ME,
       })
       .valueChanges.subscribe(result => {
         console.log(result);

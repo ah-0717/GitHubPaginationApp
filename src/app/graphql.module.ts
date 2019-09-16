@@ -1,19 +1,24 @@
-import {NgModule, Input} from '@angular/core';
-import {ApolloModule, APOLLO_OPTIONS} from 'apollo-angular';
-import {HttpLinkModule, HttpLink} from 'apollo-angular-link-http';
-import {InMemoryCache} from 'apollo-cache-inmemory';
-import { HttpHeaders } from '@angular/common/http';
-import { Apollo } from 'apollo-angular';
-import { ApolloLink, concat } from 'apollo-link';
+import { NgModule } from '@angular/core';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-angular-link-http';
 
-// ローカルから読み込む
-import { environment } from './../environments/environment';
-export function print() {
-  console.log('test: ', environment.GITHUB_TOKEN);
-}
+import gql from 'graphql-tag';
+
+export const ME = gql`
+  query me {
+    user(login: "ah-1991") {
+      name
+      avatarUrl
+    }
+  }
+`;
 
 const uri = ''; // <-- add the URL of the GraphQL server here
-export function createApollo(httpLink: HttpLink, apollo: Apollo) {
+export function createApollo(httpLink: HttpLink) {
+  return {
+    link: httpLink.create({uri}),
+    hash: new InMemoryCache()
+  };
 }
 
 @NgModule({
