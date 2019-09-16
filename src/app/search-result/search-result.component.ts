@@ -1,14 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { ME, SEARCH_REPOSITORIES } from '../graphql.module';
-
-const VARIABLES = {
-  first: 5,
-  after: null,
-  last: null,
-  before: null,
-  query: 'フロントエンドエンジニア'
-};
+import { Component, OnInit, Input } from '@angular/core';
+import { ApolloQueryResult } from 'apollo-client';
 
 @Component({
   selector: 'app-search-result',
@@ -19,23 +10,18 @@ export class SearchResultComponent implements OnInit {
   rates: any[];
   loading = true;
   error: any;
-  state; // ts IF定義
 
-  constructor(private apollo: Apollo) {
-    this.state = VARIABLES;
-  }
+  // private _searchResult: ApolloQueryResult<unknown>;
+  private _searchResult: any; //結果表示用
 
-  ngOnInit() {
-    this.apollo.watchQuery({
-        query: SEARCH_REPOSITORIES,
-        variables: {...this.state}
-      })
-      .valueChanges.subscribe(result => {
-        console.log(result);
-        // this.rates = result.data && result.data.user.name;
-        // this.loading = result.loading;
-        // this.error = result.message;
-      });
-  }
+  @Input() set searchResult(value: ApolloQueryResult<unknown>) {
+    this._searchResult = JSON.stringify(value);
+}
+
+  // @Input() searchResult: ApolloQueryResult<unknown>;
+
+  constructor() {}
+
+  ngOnInit() {}
 
 }

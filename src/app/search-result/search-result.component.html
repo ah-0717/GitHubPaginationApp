@@ -1,4 +1,4 @@
-<div *ngIf="loading">
+<div *ngIf="searchResult && searchResult.loading">
   Loading...
 </div>
 <div *ngIf="error">
@@ -7,3 +7,4 @@
 <div *ngIf="rates">
   {{rates}}
 </div>
+<div>{{_searchResult}}</div>

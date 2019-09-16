@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,11 +13,13 @@ import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { ApolloLink, concat } from 'apollo-link';
 import { environment } from 'src/environments/environment';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { SearchFormComponent } from './search-form/search-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchResultComponent
+    SearchResultComponent,
+    SearchFormComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
     GraphQLModule,
     HttpClientModule,
     HttpLinkModule,
-    ApolloModule
+    ApolloModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
