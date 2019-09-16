@@ -1,10 +1,11 @@
-<div *ngIf="searchResult && searchResult.loading">
+<div *ngIf="result && result.loading">
   Loading...
 </div>
-<div *ngIf="error">
-  Error :(
+<div *ngIf="result && result.errors">
+  <ul>
+    <li *ngFor="let error of result.errors" >{{error.message}}</li>
+  </ul>
 </div>
-<div *ngIf="rates">
-  {{rates}}
-</div>
-<div>{{_searchResult}}</div>
+<h2>
+  GitHub Repositories Search Results - <ng-container *ngIf="result && !result.loading && !result.errors">{{title}}</ng-container>
+</h2>

@@ -12,7 +12,7 @@ const DEFAULT_STATE = {
   after: null,
   last: null,
   before: null,
-  query: 'フロントエンドエンジニア'
+  query: ''
 };
 
 @Component({
@@ -24,7 +24,7 @@ export class SearchFormComponent implements OnInit {
   searchForm: FormGroup;
   message: string;
   searchValue: string;
-  state: any; // ts IF定義
+  state: any; // todo IF定義
   searchResult: ApolloQueryResult<unknown>;
 
   constructor(private fb: FormBuilder, private apollo: Apollo) {
@@ -52,9 +52,6 @@ export class SearchFormComponent implements OnInit {
     .valueChanges.subscribe(result => {
       console.log(result);
       this.searchResult = result;
-      // this.rates = result.data && result.data.user.name;
-      // this.loading = result.loading;
-      // this.error = result.message;
     });
 
   }

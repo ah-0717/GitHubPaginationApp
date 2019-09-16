@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApolloQueryResult } from 'apollo-client';
+import { GraphQLError } from 'graphql/error/GraphQLError';
 
 @Component({
   selector: 'app-search-result',
@@ -7,20 +8,36 @@ import { ApolloQueryResult } from 'apollo-client';
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  rates: any[];
-  loading = true;
-  error: any;
+  loading: boolean;
+  errorMessages: ReadonlyArray<GraphQLError>;
 
-  // private _searchResult: ApolloQueryResult<unknown>;
-  private _searchResult: any; //結果表示用
+  result: any; // 結果表示用
+  title: string;
 
-  @Input() set searchResult(value: ApolloQueryResult<unknown>) {
-    this._searchResult = JSON.stringify(value);
-}
+  constructor() {
+    this.loading = false;
+  }
 
-  // @Input() searchResult: ApolloQueryResult<unknown>;
+  @Input() set searchResult(result: ApolloQueryResult<unknown>) {
+    if (!result) {
+      return;
+    }
 
-  constructor() {}
+    this.loading = result.loading;
+    if (result.loading) {
+      return;
+    }
+    if (result.errors) {
+      this.errorMessages = result.errors;
+      return;
+    }
+    // タイトル
+    const repositoryCount = result.data.search.repositoryCount;
+    const repositoryUnit = repositoryCount === 1 ? 'Repository' : 'Repositories';
+    this.title = `${repositoryCount} ${repositoryUnit}`;
+
+    this.result = result;
+  }
 
   ngOnInit() {}
 
