@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Apollo } from 'apollo-angular';
-import { StringValueNode } from 'graphql';
-import { ME, SEARCH_REPOSITORIES } from '../graphql.module';
+import { SEARCH_REPOSITORIES } from '../graphql.module';
 import { ApolloQueryResult } from 'apollo-client';
+import { RequestQueryService } from '../request-query.service';
 
 // 検索用の設定
+const PER_PAGE = 5;
 const DEFAULT_STATE = {
-  first: 5,
+  first: PER_PAGE,
   after: null,
   last: null,
   before: null,
@@ -28,7 +28,7 @@ export class SearchFormComponent implements OnInit {
   searchResult: ApolloQueryResult<unknown>;
   loading: boolean;
 
-  constructor(private fb: FormBuilder, private apollo: Apollo) {
+  constructor(private fb: FormBuilder, private requestQueryService: RequestQueryService) {
     this.state = DEFAULT_STATE;
     this.loading = false;
   }
@@ -48,16 +48,36 @@ export class SearchFormComponent implements OnInit {
     this.searchValue = this.formSearchValue.value;
     this.loading = true;
 
-    this.apollo.watchQuery({
+    this.requestQueryService.query({
       query: SEARCH_REPOSITORIES,
       variables: Object.assign(this.state, {query: this.formSearchValue.value})
-    })
-    .valueChanges.subscribe(result => {
+    }).subscribe(result => {
       console.log(result);
       this.loading = false;
       this.searchResult = result;
     });
-
   }
 
+  goNext(search: any) {
+    this.loading = true;
+    this.requestQueryService.query({
+      query: SEARCH_REPOSITORIES,
+      variables: Object.assign(this.state, {
+        first: PER_PAGE,
+        after: search.pageInfo.endCursor,
+        last: null,
+        before: null,
+        query: this.formSearchValue.value
+      })
+    }).subscribe(result => {
+      console.log(result);
+      this.loading = false;
+      this.searchResult = result;
+    },
+    error => {
+      console.log(error);
+      this.loading = false;
+      this.searchResult = error;
+    });
+  }
 }

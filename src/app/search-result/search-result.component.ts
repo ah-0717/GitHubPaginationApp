@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApolloQueryResult } from 'apollo-client';
 import { GraphQLError } from 'graphql/error/GraphQLError';
+import { RequestQueryService } from '../request-query.service';
 
 @Component({
   selector: 'app-search-result',
@@ -14,6 +15,8 @@ export class SearchResultComponent implements OnInit {
   result: any; // 結果表示用
   title: string;
 
+  @Output() goNext = new EventEmitter();
+
   constructor() {}
 
   @Input() set loading(isLoad: boolean) {
@@ -21,6 +24,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   @Input() set searchResult(result: ApolloQueryResult<unknown>) {
+    // todo 見直したい
     if (!result) {
       return;
     }
@@ -29,8 +33,8 @@ export class SearchResultComponent implements OnInit {
     if (result.loading) {
       return;
     }
-    if (result.errors) {
-      this.errorMessages = result.errors;
+    if (result.graphQLErrors) {
+      this.result = result;
       return;
     }
     const search = result.data.search;
@@ -43,5 +47,10 @@ export class SearchResultComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  // todo IF定義
+  clickNext(search: any) {
+    this.goNext.emit(search);
+  }
 
 }
