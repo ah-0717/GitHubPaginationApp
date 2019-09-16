@@ -8,14 +8,16 @@ import { GraphQLError } from 'graphql/error/GraphQLError';
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  loading: boolean;
+  _loading: boolean;
   errorMessages: ReadonlyArray<GraphQLError>;
 
   result: any; // 結果表示用
   title: string;
 
-  constructor() {
-    this.loading = false;
+  constructor() {}
+
+  @Input() set loading(isLoad: boolean) {
+    this._loading = isLoad;
   }
 
   @Input() set searchResult(result: ApolloQueryResult<unknown>) {
@@ -23,7 +25,7 @@ export class SearchResultComponent implements OnInit {
       return;
     }
 
-    this.loading = result.loading;
+    this._loading = result.loading;
     if (result.loading) {
       return;
     }
@@ -31,8 +33,9 @@ export class SearchResultComponent implements OnInit {
       this.errorMessages = result.errors;
       return;
     }
+    const search = result.data.search;
     // タイトル
-    const repositoryCount = result.data.search.repositoryCount;
+    const repositoryCount = search.repositoryCount;
     const repositoryUnit = repositoryCount === 1 ? 'Repository' : 'Repositories';
     this.title = `${repositoryCount} ${repositoryUnit}`;
 
