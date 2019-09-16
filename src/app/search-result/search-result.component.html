@@ -19,5 +19,6 @@
       <a href="{{edge.node.url}}" target="_blank" rel="noopener noreferrer">{{edge.node.name}}</a>
     </li>
   </ul>
+  <button *ngIf="result.data.search.pageInfo.hasPreviousPage" (click)="clickPrevious(result.data.search)">Previous</button>
   <button *ngIf="result.data.search.pageInfo.hasNextPage" (click)="clickNext(result.data.search)">Next</button>
 </ng-container>

@@ -80,4 +80,27 @@ export class SearchFormComponent implements OnInit {
       this.searchResult = error;
     });
   }
+
+  goPrevious(search: any) {
+    this.loading = true;
+    this.requestQueryService.query({
+      query: SEARCH_REPOSITORIES,
+      variables: Object.assign(this.state, {
+        first: null,
+        after: null,
+        last: PER_PAGE,
+        before: search.pageInfo.startCursor,
+        query: this.formSearchValue.value
+      })
+    }).subscribe(result => {
+      console.log(result);
+      this.loading = false;
+      this.searchResult = result;
+    },
+    error => {
+      console.log(error);
+      this.loading = false;
+      this.searchResult = error;
+    });
+  }
 }
