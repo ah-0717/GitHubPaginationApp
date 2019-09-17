@@ -15,10 +15,12 @@
 
 <ng-container *ngIf="result && !_loading && !result.graphQLErrors">
   <ul>
-    <li *ngFor="let edge of result.data.search.edges">
+    <li *ngFor="let edge of search.edges">
       <a href="{{edge.node.url}}" target="_blank" rel="noopener noreferrer">{{edge.node.name}}</a>
+      &nbsp;
+      <app-star-button [edge]="edge"></app-star-button>
     </li>
   </ul>
-  <button *ngIf="result.data.search.pageInfo.hasPreviousPage" (click)="clickPrevious(result.data.search)">Previous</button>
-  <button *ngIf="result.data.search.pageInfo.hasNextPage" (click)="clickNext(result.data.search)">Next</button>
+  <button *ngIf="search.pageInfo.hasPreviousPage" (click)="clickPrevious(search)">Previous</button>
+  <button *ngIf="search.pageInfo.hasNextPage" (click)="clickNext(search)">Next</button>
 </ng-container>

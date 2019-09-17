@@ -14,12 +14,14 @@ import { ApolloLink, concat } from 'apollo-link';
 import { environment } from 'src/environments/environment';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { SearchFormComponent } from './search-form/search-form.component';
+import { StarButtonComponent } from './star-button/star-button.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchResultComponent,
-    SearchFormComponent
+    SearchFormComponent,
+    StarButtonComponent
   ],
   imports: [
     BrowserModule,

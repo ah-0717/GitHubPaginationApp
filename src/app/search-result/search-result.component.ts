@@ -13,6 +13,8 @@ export class SearchResultComponent implements OnInit {
   errorMessages: ReadonlyArray<GraphQLError>;
 
   result: any; // 結果表示用
+  search: any;
+  starCount: string;
   title: string;
 
   @Output() goNext = new EventEmitter();
@@ -38,9 +40,9 @@ export class SearchResultComponent implements OnInit {
       this.result = result;
       return;
     }
-    const search = result.data.search;
+    this.search = result.data.search;
     // タイトル
-    const repositoryCount = search.repositoryCount;
+    const repositoryCount = this.search.repositoryCount;
     const repositoryUnit = repositoryCount === 1 ? 'Repository' : 'Repositories';
     this.title = `${repositoryCount} ${repositoryUnit}`;
 
