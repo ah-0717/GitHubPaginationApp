@@ -12,8 +12,11 @@ export class StarButtonComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const totalCount = this.edge.node.stargazers.totalCount;
-    this.star = totalCount === 1 ? '1 star' : `${totalCount} stars`;
+    const node: any = this.edge.node;
+    const totalCount: number = node.stargazers.totalCount;
+    const viewerHasStarred: boolean = node.viewerHasStarred;
+    const starCount = totalCount === 1 ? '1 star' : `${totalCount} stars`;
+    this.star = `${starCount} | ${viewerHasStarred ? 'starred' : '-'}`;
   }
 
 }
