@@ -21,7 +21,7 @@ export class StarButtonComponent implements OnInit {
     this.starStatus = `${starCount} | ${viewerHasStarred ? 'starred' : '-'}`;
   }
 
-  clickStar(nodeId: string) {
-    this.requestQueryService.shareNodeId(nodeId);
+  clickStar(node: any) {
+    this.requestQueryService.shareNode(node);
   }
 }
