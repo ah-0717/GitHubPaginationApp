@@ -3,6 +3,18 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-angular-link-http';
 
 import gql from 'graphql-tag';
+
+export const ADD_STAR = gql`
+mutation addStar($input: AddStarInput!) {
+  addStar(input: $input) {
+    starrable {
+      id
+      viewerHasStarred
+    }
+  }
+}
+`;
+
 export const SEARCH_REPOSITORIES = gql`
 query searchRepositories($first: Int, $after: String, $last: Int, $before: String, $query: String!) {
   search(first: $first, after: $after, last: $last, before: $before, query: $query, type: REPOSITORY) {
@@ -30,7 +42,6 @@ query searchRepositories($first: Int, $after: String, $last: Int, $before: Strin
   }
 }
 `;
-
 
 export const ME = gql`
   query me {
