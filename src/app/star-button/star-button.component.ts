@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { RequestQueryService } from '../request-query.service';
 
 @Component({
   selector: 'app-star-button',
@@ -7,16 +8,20 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class StarButtonComponent implements OnInit {
   @Input() edge;
-  star: string;
+  starStatus: string;
+  node: any;
 
-  constructor() { }
+  constructor(private requestQueryService: RequestQueryService) { }
 
   ngOnInit() {
-    const node: any = this.edge.node;
-    const totalCount: number = node.stargazers.totalCount;
-    const viewerHasStarred: boolean = node.viewerHasStarred;
+    this.node = this.edge.node;
+    const totalCount: number = this.node.stargazers.totalCount;
+    const viewerHasStarred: boolean = this.node.viewerHasStarred;
     const starCount = totalCount === 1 ? '1 star' : `${totalCount} stars`;
-    this.star = `${starCount} | ${viewerHasStarred ? 'starred' : '-'}`;
+    this.starStatus = `${starCount} | ${viewerHasStarred ? 'starred' : '-'}`;
   }
 
+  clickStar(nodeId: string) {
+    this.requestQueryService.shareNodeId(nodeId);
+  }
 }
