@@ -15,6 +15,17 @@ mutation addStar($input: AddStarInput!) {
 }
 `;
 
+export const REMOVE_STAR = gql`
+mutation removeStar($input: RemoveStarInput!) {
+  removeStar(input: $input) {
+    starrable {
+      id
+      viewerHasStarred
+    }
+  }
+}
+`;
+
 export const SEARCH_REPOSITORIES = gql`
 query searchRepositories($first: Int, $after: String, $last: Int, $before: String, $query: String!) {
   search(first: $first, after: $after, last: $last, before: $before, query: $query, type: REPOSITORY) {

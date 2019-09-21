@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { ADD_STAR, SEARCH_REPOSITORIES } from '../graphql.module';
+import { ADD_STAR, REMOVE_STAR, SEARCH_REPOSITORIES } from '../graphql.module';
 import { ApolloQueryResult } from 'apollo-client';
 import { RequestQueryService } from '../request-query.service';
 
@@ -32,9 +32,9 @@ export class SearchFormComponent implements OnInit {
     this.state = DEFAULT_STATE;
     this.loading = false;
 
-    requestQueryService.sharedNodeIdSource$.subscribe(
-      nodeId => {
-        this.addStar(nodeId);
+    requestQueryService.sharedNodeSource$.subscribe(
+      node => {
+        this.addOrRemoveStar(node);
       }
     );
   }
@@ -110,10 +110,10 @@ export class SearchFormComponent implements OnInit {
     });
   }
 
-  addStar(nodeId: string) {
+  addOrRemoveStar(node: any) {
     this.requestQueryService.mutation({
-      mutation: ADD_STAR,
-      variables: { input: { starrableId: nodeId}}
+      mutation: node.viewerHasStarred ? REMOVE_STAR : ADD_STAR,
+      variables: { input: { starrableId: node.id}}
     }).subscribe(result => {
       console.log(result);
     });

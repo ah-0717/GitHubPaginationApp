@@ -6,8 +6,8 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class RequestQueryService {
-  private sharedNodeIdSource = new Subject<string>();
-  sharedNodeIdSource$ = this.sharedNodeIdSource.asObservable();
+  private sharedNodeSource = new Subject<string>();
+  sharedNodeSource$ = this.sharedNodeSource.asObservable();
 
   constructor(private apollo: Apollo) { }
 
@@ -20,7 +20,7 @@ export class RequestQueryService {
   }
 
   // app-star-button(孫)からapp-search-form（親）に値を送るためのサービス
-  shareNodeId(nodeId: string) {
-    this.sharedNodeIdSource.next(nodeId);
+  shareNode(node: any) {
+    this.sharedNodeSource.next(node);
   }
 }
