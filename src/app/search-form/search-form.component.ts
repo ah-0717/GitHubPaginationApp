@@ -53,10 +53,11 @@ export class SearchFormComponent implements OnInit {
     this.message = this.formSearchValue.value;
     this.searchValue = this.formSearchValue.value;
     this.loading = true;
+    this.state = Object.assign(this.state, {query: this.formSearchValue.value});
 
     this.requestQueryService.query({
       query: SEARCH_REPOSITORIES,
-      variables: Object.assign(this.state, {query: this.formSearchValue.value})
+      variables: this.state
     }).subscribe(result => {
       console.log(result);
       this.loading = false;
@@ -66,15 +67,17 @@ export class SearchFormComponent implements OnInit {
 
   goNext(search: any) {
     this.loading = true;
+    this.state = Object.assign(this.state, {
+      first: PER_PAGE,
+      after: search.pageInfo.endCursor,
+      last: null,
+      before: null,
+      query: this.formSearchValue.value
+    });
+
     this.requestQueryService.query({
       query: SEARCH_REPOSITORIES,
-      variables: Object.assign(this.state, {
-        first: PER_PAGE,
-        after: search.pageInfo.endCursor,
-        last: null,
-        before: null,
-        query: this.formSearchValue.value
-      })
+      variables: this.state
     }).subscribe(result => {
       console.log(result);
       this.loading = false;
@@ -89,15 +92,17 @@ export class SearchFormComponent implements OnInit {
 
   goPrevious(search: any) {
     this.loading = true;
+    this.state = Object.assign(this.state, {
+      first: null,
+      after: null,
+      last: PER_PAGE,
+      before: search.pageInfo.startCursor,
+      query: this.formSearchValue.value
+    });
+
     this.requestQueryService.query({
       query: SEARCH_REPOSITORIES,
-      variables: Object.assign(this.state, {
-        first: null,
-        after: null,
-        last: PER_PAGE,
-        before: search.pageInfo.startCursor,
-        query: this.formSearchValue.value
-      })
+      variables: this.state
     }).subscribe(result => {
       console.log(result);
       this.loading = false;
@@ -113,7 +118,11 @@ export class SearchFormComponent implements OnInit {
   addOrRemoveStar(node: any) {
     this.requestQueryService.mutation({
       mutation: node.viewerHasStarred ? REMOVE_STAR : ADD_STAR,
-      variables: { input: { starrableId: node.id}}
+      variables: { input: { starrableId: node.id}},
+      refetchQueries: [{
+        query: SEARCH_REPOSITORIES,
+        variables: this.state
+      }]
     }).subscribe(result => {
       console.log(result);
     });
