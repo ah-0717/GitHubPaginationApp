@@ -119,10 +119,37 @@ export class SearchFormComponent implements OnInit {
     this.requestQueryService.mutation({
       mutation: node.viewerHasStarred ? REMOVE_STAR : ADD_STAR,
       variables: { input: { starrableId: node.id}},
-      refetchQueries: [{
-        query: SEARCH_REPOSITORIES,
-        variables: this.state
-      }]
+
+      // star総数を更新する 2通りのやり方
+      // mutation後にもう一回にクエリを投げて情報を取得
+      // refetchQueries: [{
+      //   query: SEARCH_REPOSITORIES,
+      //   variables: this.state
+      // }],
+
+      // 内部のメモリ上にクエリを投げて情報を取得
+      update: (store, {data: {addStar, ç}}) => {
+        const { starrable } = addStar || addStar;
+        const data = store.readQuery({
+          query: SEARCH_REPOSITORIES,
+          variables: this.state
+        });
+        const edges = data.search.edges;
+        const newEdges = edges.map(edge => {
+          if (edge.node.id === node.id) {
+            const totalCount = edge.node.stargazers.totalCount;
+            const diff = starrable.viewerHasStarred ? -1 : 1;
+            const newTotalCount = totalCount + diff;
+            edge.node.stargazers.totalCount = newTotalCount;
+          }
+          return edge;
+        });
+        data.search.edges = newEdges;
+        store.writeQuery({
+          query: SEARCH_REPOSITORIES,
+          data
+        });
+      },
     }).subscribe(result => {
       console.log(result);
     });
